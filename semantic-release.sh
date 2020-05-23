@@ -52,7 +52,7 @@ REPOSITORY_BASE_URL="https://github.com/${ORGANIZATION}/${REPOSITORY}"
 COMPARE_URL="${REPOSITORY_BASE_URL}/compare"
 
 # ---- AUTH ----
-[ ! -z "$GH_TOKEN" ] && echo "[$(date)][AUTH]: GH_TOKEN found" || {
+[ -n "$GH_TOKEN" ] && echo "[$(date)][AUTH]: GH_TOKEN found" || {
   echo "[$(date)][AUTH]: Error! release needs GH_TOKEN, use export GH_TOKEN='YOURTOKEN'."
   exit 1
 }
