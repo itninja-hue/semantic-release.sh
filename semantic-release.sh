@@ -46,10 +46,10 @@ ORGANIZATION=$(awk '/url/{print $NF}' .git/config | rev | cut -d '/' -f  2 | rev
 REPOSITORY=$(basename -s .git "$(awk '/url/{print $NF}' .git/config)")
 BRANCH=$(basename "$(awk '{print $2}' .git/HEAD)")
 BASE_URL="https://api.github.com"
-REPOS_URL=$(echo "${BASE_URL}/repos")
-COMMIT_URL=$(echo "${BASE_URL}/commit")
-REPOSITORY_BASE_URL=$(echo "https://github.com/${ORGANIZATION}/${REPOSITORY}")
-COMPARE_URL=$(echo "${REPOSITORY_BASE_URL}/compare")
+REPOS_URL="${BASE_URL}/repos"
+COMMIT_URL="${BASE_URL}/commit"
+REPOSITORY_BASE_URL="https://github.com/${ORGANIZATION}/${REPOSITORY}"
+COMPARE_URL="${REPOSITORY_BASE_URL}/compare"
 
 # ---- AUTH ----
 [ ! -z "$GH_TOKEN" ] && echo "[$(date)][AUTH]: GH_TOKEN found" || {
@@ -82,7 +82,7 @@ TAGS=$(curl --silent -H  "Authorization: token ${GH_TOKEN}" "${REPOS_URL}/${ORGA
   echo "$(date)][INIT_TAG]: Next release version will be ${NEXT_VERSION} tagged: ${NEXT_TAG} .";
 } || {
   LATEST_TAG=$(echo "${TAGS}" | awk -v preRelease="${PRE_RELEASE_REGEX}" 'BEGIN{FS="|";RS=","} $2 ~ preRelease {print $1; exit}');
-  GIT_ARG=$(echo  "${LATEST_TAG}"..HEAD);
+  GIT_ARG="${LATEST_TAG}"..HEAD;
   echo "$(date)][INIT_TAG]: previous semVer releases found, Lates tag : ${LATEST_TAG}";
 }
 
@@ -112,7 +112,7 @@ BEGIN{RS="|"}
   }
 }
 END{printf("%s.%s.%s",CURRENT_MAJOR,CURRENT_MINOR,CURRENT_PATCH)}')
-NEXT_TAG=$(echo "v${NEXT_VERSION}")
+NEXT_TAG="v${NEXT_VERSION}"
 [ "${LATEST_TAG}" = "${NEXT_TAG}" ] && {
   echo "[$(date)][TAGS]: Nothing new to release."
   exit 0
@@ -170,7 +170,7 @@ echo "$(date)][CHANGELOG]: CHANGELOG generated."
 
 # ---- CREATE/UPDATE CHANGELOG.md ----
 echo "$(date)][CHANGELOG]: Pushing CHANGELOG to ${REPOSITORY}."
-RELEASE_COMMIT_COMMENT=$(echo "chore(release): ${NEXT_VERSION} [skip ci]")
+RELEASE_COMMIT_COMMENT="chore(release): ${NEXT_VERSION} [skip ci]"
 [ ! -f CHANGELOG.md ]&& touch CHANGELOG.md
 echo "${CHANGE_LOG}" | awk 'BEGIN{RS="|"}{print $0}' | cat -s - CHANGELOG.md > CHANGELOG.md.tmp && mv CHANGELOG.md.tmp CHANGELOG.md
 git add CHANGELOG.md
