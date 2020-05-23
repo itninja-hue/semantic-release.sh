@@ -42,9 +42,9 @@ command -v touch >/dev/null || {
 }
 
 # ---- VARS ----
-ORGANIZATION=$(echo "$(awk '/url/{print $NF}' .git/config | rev | cut -d '/' -f  2 | rev)")
-REPOSITORY=$(echo "$(basename -s .git `awk '/url/{print $NF}' .git/config`)")
-BRANCH=$(echo "$(basename `awk '{print $2}' .git/HEAD`)")
+ORGANIZATION=$(awk '/url/{print $NF}' .git/config | rev | cut -d '/' -f  2 | rev)
+REPOSITORY=$(basename -s .git `awk '/url/{print $NF}' .git/config`)
+BRANCH=$(basename `awk '{print $2}' .git/HEAD`)
 BASE_URL="https://api.github.com"
 REPOS_URL=$(echo "${BASE_URL}/repos")
 COMMIT_URL=$(echo "${BASE_URL}/commit")
@@ -56,7 +56,7 @@ COMPARE_URL=$(echo "${REPOSITORY_BASE_URL}/compare")
   echo "[$(date)][AUTH]: Error! release needs GH_TOKEN, use export GH_TOKEN='YOURTOKEN'."
   exit 1
 }
-AUTH_RESPONSE=$(echo "$(curl --silent -I -X GET  -H "Authorization: token ${GH_TOKEN}" "${BASE_URL}" | awk '/^Status/{print $2}')")
+AUTH_RESPONSE=$(curl --silent -I -X GET  -H "Authorization: token ${GH_TOKEN}" "${BASE_URL}" | awk '/^Status/{print $2}')
 [ "${AUTH_RESPONSE}" = "200" ] && echo "[$(date)][AUTH]: authentification success." || {
   echo "[$(date)][AUTH]: Error! authentification failed."
   exit 1
