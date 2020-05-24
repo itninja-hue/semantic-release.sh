@@ -8,34 +8,13 @@ REGEX_MINOR='^feat'
 REGEX_PATCH='^fix'
 
 # ---- CHECK REQ ----
-command -v git >/dev/null || {
-  echo "[$(date)][REQ]: Error! git is required, but not found."
-  exit 1
-}
-command -v awk >/dev/null || {
-  echo "[$(date)][REQ]: Error! awk is required, but not found."
-  exit 1
-}
-command -v jq >/dev/null || {
-  echo "[$(date)][REQ]: Error! jq is required, but not found."
-  exit 1
-}
-command -v cat >/dev/null || {
-  echo "[$(date)][REQ]: Error! cat is required, but not found."
-  exit 1
-}
-command -v basename >/dev/null || {
-  echo "[$(date)][REQ]: Error! basename is required, but not found."
-  exit 1
-}
-command -v curl >/dev/null || {
-  echo "[$(date)][REQ]: Error! curl is required, but not found."
-  exit 1
-}
-command -v touch >/dev/null || {
-  echo "[$(date)][REQ]: Error! touch is required, but not found."
-  exit 1
-}
+for cmd in awk basename cat curl jq git touch;
+	do
+		command -v "${cmd}" >/dev/null || {
+		echo "[$(date)][REQ]: Error! ${cmd} is required, but not found."
+		exit 1
+		};
+	done
 [ -d ".git" ] || {
   echo "[$(date)][REQ]: Error! semantic-release.sh only wokrs on git repositories."
   exit 1
