@@ -23,7 +23,7 @@ for cmd in awk basename cat curl jq git touch;
 # ---- VARS ----
 ORGANIZATION=$(awk '/url/{print $NF}' .git/config | rev | cut -d '/' -f  2 | rev)
 REPOSITORY=$(basename -s .git "$(awk '/url/{print $NF}' .git/config)")
-BRANCH=$(basename "$(awk '{print $2}' .git/HEAD)")
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 BASE_URL="https://api.github.com"
 REPOS_URL="${BASE_URL}/repos"
 COMMIT_URL="${BASE_URL}/commit"
