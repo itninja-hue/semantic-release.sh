@@ -9,12 +9,12 @@ REGEX_PATCH='^fix'
 
 # ---- CHECK REQ ----
 for cmd in awk basename cat curl jq git touch;
-	do
-		command -v "${cmd}" >/dev/null || {
-		echo "[$(date)][REQ]: Error! ${cmd} is required, but not found."
-		exit 1
-		};
-	done
+  do
+    command -v "${cmd}" >/dev/null || {
+    echo "[$(date)][REQ]: Error! ${cmd} is required, but not found."
+    exit 1
+    };
+  done
 [ -d ".git" ] || {
   echo "[$(date)][REQ]: Error! semantic-release.sh only wokrs on git repositories."
   exit 1
@@ -66,8 +66,8 @@ TAGS=$(curl --silent -H  "Authorization: token ${GH_TOKEN}" "${REPOS_URL}/${ORGA
 }
 
 # ---- INIT DATA ----
-SHAS=$(git log "${GIT_ARG}" --format="%H %s%b"  | awk -v REGEX_CONVENTIONAL_COMMITS="${REGEX_CONVENTIONAL_COMMITS}" '$2 ~ REGEX_CONVENTIONAL_COMMITS {printf("%s|",$1)}')
-COMMENTS=$(git log "${GIT_ARG}" --format="%H %s%b"  | awk -v REGEX_CONVENTIONAL_COMMITS="${REGEX_CONVENTIONAL_COMMITS}" '$2 ~ REGEX_CONVENTIONAL_COMMITS {for(i=2;i<=NF;++i)printf("%s ",$i); printf("|")}')
+SHAS=$(git log ${GIT_ARG} --format="%H %s%b"  | awk -v REGEX_CONVENTIONAL_COMMITS="${REGEX_CONVENTIONAL_COMMITS}" '$2 ~ REGEX_CONVENTIONAL_COMMITS {printf("%s|",$1)}')
+COMMENTS=$(git log ${GIT_ARG} --format="%H %s%b"  | awk -v REGEX_CONVENTIONAL_COMMITS="${REGEX_CONVENTIONAL_COMMITS}" '$2 ~ REGEX_CONVENTIONAL_COMMITS {for(i=2;i<=NF;++i)printf("%s ",$i); printf("|")}')
 
 # ---- CALCULATING NEXT VERSION ----
 CURRENT_MAJOR=$(echo  "${LATEST_TAG}" | awk 'BEGIN{FS="."}{print substr($1,2,length($1)-1)}')
